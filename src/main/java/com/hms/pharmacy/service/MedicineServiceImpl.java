@@ -43,9 +43,9 @@ public class MedicineServiceImpl implements MedicineService {
         Medicine existingMedicine = medicineRepository.findById(medicineDTO.getId())
                 .orElseThrow(() -> new HmsException("MEDICINE_NOT_FOUND"));
 
-        /* Check if there is a medicine with same name and dosage */
         if (!(medicineDTO.getName().equalsIgnoreCase(existingMedicine.getName())
                 && medicineDTO.getDosage().equalsIgnoreCase(existingMedicine.getDosage()))) {
+            /* Check if a medicine with the same name and dosage already exists */
             Optional<Medicine> medicineWithSameNameAndDosage = medicineRepository
                     .findByNameIgnoreCaseAndDosageIgnoreCase(medicineDTO.getName(), medicineDTO.getDosage());
             if (medicineWithSameNameAndDosage.isPresent()) {
@@ -59,7 +59,6 @@ public class MedicineServiceImpl implements MedicineService {
         existingMedicine.setType(medicineDTO.getType());
         existingMedicine.setManufacturer(medicineDTO.getManufacturer());
         existingMedicine.setUnitPrice(medicineDTO.getUnitPrice());
-        existingMedicine.setCreatedAt(LocalDateTime.now());
         medicineRepository.save(existingMedicine);
     }
 
