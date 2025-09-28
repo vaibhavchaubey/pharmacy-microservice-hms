@@ -21,6 +21,7 @@ public class MedicineDTO {
     private MedicineType type;
     private String manufacturer;
     private Integer unitPrice;
+    private Integer stock;
     private LocalDateTime createdAt;
 
     public Medicine toEntity() {
@@ -32,6 +33,7 @@ public class MedicineDTO {
                 this.type,
                 this.manufacturer,
                 this.unitPrice,
+                this.stock,
                 this.createdAt);
     }
 

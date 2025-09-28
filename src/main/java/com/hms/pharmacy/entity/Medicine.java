@@ -27,6 +27,7 @@ public class Medicine {
     private MedicineType type;
     private String manufacturer;
     private Integer unitPrice;
+    private Integer stock;
     private LocalDateTime createdAt;
 
     public Medicine(Long id) {
@@ -42,6 +43,7 @@ public class Medicine {
                 this.type,
                 this.manufacturer,
                 this.unitPrice,
+                this.stock,
                 this.createdAt);
     }
 
