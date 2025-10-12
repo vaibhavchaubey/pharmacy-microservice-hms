@@ -3,6 +3,7 @@ package com.hms.pharmacy.service;
 import java.util.List;
 
 import com.hms.pharmacy.dto.MedicineInventoryDTO;
+import com.hms.pharmacy.entity.MedicineInventory;
 import com.hms.pharmacy.exception.HmsException;
 
 public interface MedicineInventoryService {
@@ -16,4 +17,5 @@ public interface MedicineInventoryService {
 
     public void deleteMedicine(Long id) throws HmsException;
 
+    public void deleteExpiredMedicines() throws HmsException;
 }

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.entity.MedicineInventory;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,8 @@ public class MedicineInventoryDTO {
     private Integer quantity;
     private LocalDate expiryDate;
     private LocalDate addedDate;
+    private Integer initialQuantity;
+    private StockStatus status;
 
     public MedicineInventory toEntity() {
         return new MedicineInventory(
@@ -27,7 +31,7 @@ public class MedicineInventoryDTO {
                 this.batchNo,
                 this.quantity,
                 this.expiryDate,
-                this.addedDate);
+                this.addedDate, this.initialQuantity, this.status);
     }
 
 }

@@ -3,8 +3,11 @@ package com.hms.pharmacy.entity;
 import java.time.LocalDate;
 
 import com.hms.pharmacy.dto.MedicineInventoryDTO;
+import com.hms.pharmacy.dto.StockStatus;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +33,9 @@ public class MedicineInventory {
     private Integer quantity;
     private LocalDate expiryDate;
     private LocalDate addedDate;
+    private Integer initialQuantity;
+    @Enumerated(EnumType.STRING)
+    private StockStatus status;
 
     public MedicineInventory(Long id) {
         this.id = id;
@@ -42,7 +48,7 @@ public class MedicineInventory {
                 this.batchNo,
                 this.quantity,
                 this.expiryDate,
-                this.addedDate);
+                this.addedDate, this.initialQuantity, this.status);
     }
 
 }
