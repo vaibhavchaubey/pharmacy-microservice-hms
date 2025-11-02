@@ -1,0 +1,55 @@
+package com.hms.pharmacy.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hms.pharmacy.dto.SaleItemDTO;
+import com.hms.pharmacy.entity.SaleItem;
+import com.hms.pharmacy.exception.HmsException;
+import com.hms.pharmacy.repository.SaleItemRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class SaleItemServiceImpl implements SaleItemService {
+
+    private final SaleItemRepository saleItemRepository;
+
+    @Override
+    public Long createSaleItem(SaleItemDTO saleItemDTO) throws HmsException {
+        return saleItemRepository.save(saleItemDTO.toEntity()).getId();
+    }
+
+    @Override
+    public void createMultipleSaleItems(Long saleId, Long medicineId, List<SaleItemDTO> saleItemDTOs)
+            throws HmsException {
+        saleItemDTOs.stream().map((saleItem) -> {
+            saleItem.setSaleId(saleId);
+            saleItem.setMedicineId(medicineId);
+            return saleItem.toEntity();
+        }).forEach(saleItemRepository::save);
+    }
+
+    @Override
+    public void updateSaleItem(SaleItemDTO saleItemDTO) throws HmsException {
+        SaleItem existingSaleItem = saleItemRepository.findById(saleItemDTO.getId())
+                .orElseThrow(() -> new HmsException("SALE_ITEM_NOT_FOUND"));
+
+        existingSaleItem.setQuantity(saleItemDTO.getQuantity());
+        existingSaleItem.setUnitPrice(saleItemDTO.getUnitPrice());
+        saleItemRepository.save(existingSaleItem);
+    }
+
+    @Override
+    public List<SaleItemDTO> getSaleItemsBySaleId(Long saleId) throws HmsException {
+        return saleItemRepository.findBySaleId(saleId).stream().map(SaleItem::toDTO).toList();
+    }
+
+    @Override
+    public SaleItemDTO getSaleItemById(Long id) throws HmsException {
+        return saleItemRepository.findById(id).orElseThrow(() -> new HmsException("SALE_ITEM_NOT_FOUND")).toDTO();
+    }
+
+}
