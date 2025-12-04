@@ -6,10 +6,13 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.hms.pharmacy.dto.SaleDTO;
+import com.hms.pharmacy.dto.SaleItemDTO;
+import com.hms.pharmacy.dto.SaleRequest;
 import com.hms.pharmacy.entity.Sale;
 import com.hms.pharmacy.exception.HmsException;
 import com.hms.pharmacy.repository.SaleRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,17 +20,31 @@ import lombok.RequiredArgsConstructor;
 public class SaleServiceImpl implements SaleService {
 
     private final SaleRepository saleRepository;
-
+    private final MedicineInventoryService medicineInventoryService;
+    private final SaleItemService saleItemService;
 
     @Override
-    public Long createSale(SaleDTO saleDTO) throws HmsException {
-        if (saleRepository.existsByPrescriptionId(saleDTO.getPrescriptionId())) {
+    @Transactional
+    public Long createSale(SaleRequest saleRequest) throws HmsException {
+        if (saleRepository.existsByPrescriptionId(saleRequest.getPrescriptionId())) {
             throw new HmsException("SALE_ALREADY_FOUND");
 
         }
 
-        saleDTO.setSaleDate(LocalDateTime.now());
-        return saleRepository.save(saleDTO.toEntity()).getId();
+         for (SaleItemDTO saleItem : saleRequest.getSaleItems()) {
+            saleItem.setBatchNo(medicineInventoryService.sellStock(saleItem.getMedicineId(), saleItem.getQuantity()));
+        }
+
+        Sale sale = new Sale(null, saleRequest.getPrescriptionId(),
+                LocalDateTime.now(),
+                saleRequest.getTotalAmount());
+
+        sale = saleRepository.save(sale);
+
+        saleItemService.createSaleItems(sale.getId(), saleRequest.getSaleItems());
+
+        return sale.getId();
+
     }
 
     @Override

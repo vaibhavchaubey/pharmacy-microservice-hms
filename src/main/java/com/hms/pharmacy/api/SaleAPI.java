@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hms.pharmacy.dto.ResponseDTO;
 import com.hms.pharmacy.dto.SaleDTO;
 import com.hms.pharmacy.dto.SaleItemDTO;
+import com.hms.pharmacy.dto.SaleRequest;
 import com.hms.pharmacy.exception.HmsException;
 import com.hms.pharmacy.service.SaleItemService;
 import com.hms.pharmacy.service.SaleService;
@@ -34,8 +35,8 @@ public class SaleAPI {
     private final SaleItemService saleItemService;
 
     @PostMapping("/create")
-    public ResponseEntity<Long> createSale(@RequestBody SaleDTO saleDTO) throws HmsException {
-        return new ResponseEntity<>(saleService.createSale(saleDTO), HttpStatus.CREATED);
+    public ResponseEntity<Long> createSale(@RequestBody SaleRequest saleRequest) throws HmsException {
+        return new ResponseEntity<>(saleService.createSale(saleRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")

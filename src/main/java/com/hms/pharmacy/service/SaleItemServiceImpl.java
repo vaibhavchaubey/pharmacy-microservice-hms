@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 public class SaleItemServiceImpl implements SaleItemService {
 
     private final SaleItemRepository saleItemRepository;
-
     @Override
     public Long createSaleItem(SaleItemDTO saleItemDTO) throws HmsException {
         return saleItemRepository.save(saleItemDTO.toEntity()).getId();
@@ -50,6 +49,14 @@ public class SaleItemServiceImpl implements SaleItemService {
     @Override
     public SaleItemDTO getSaleItemById(Long id) throws HmsException {
         return saleItemRepository.findById(id).orElseThrow(() -> new HmsException("SALE_ITEM_NOT_FOUND")).toDTO();
+    }
+
+    @Override
+    public void createSaleItems(Long saleId, List<SaleItemDTO> saleItemDTOs) throws HmsException {
+        saleItemDTOs.stream().map((saleItem) -> {
+            saleItem.setSaleId(saleId);
+            return saleItem.toEntity();
+        }).forEach(saleItemRepository::save);
     }
 
 }
