@@ -99,6 +99,7 @@ public class MedicineInventoryServiceImpl implements MedicineInventoryService {
     }
 
     @Override
+    @Transactional
     public String sellStock(Long medicineId, Integer quantity) throws HmsException {
         List<MedicineInventory> inventories = medicineInventoryRepository
                 .findByMedicineIdAndExpiryDateAfterAndQuantityGreaterThanAndStatusOrderByExpiryDateAsc(medicineId,
