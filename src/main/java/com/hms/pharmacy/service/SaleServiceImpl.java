@@ -2,6 +2,7 @@ package com.hms.pharmacy.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -26,16 +27,19 @@ public class SaleServiceImpl implements SaleService {
     @Override
     @Transactional
     public Long createSale(SaleRequest saleRequest) throws HmsException {
-        if (saleRequest.getPrescriptionId() != null && saleRepository.existsByPrescriptionId(saleRequest.getPrescriptionId())) {
+        if (saleRequest.getPrescriptionId() != null
+                && saleRepository.existsByPrescriptionId(saleRequest.getPrescriptionId())) {
             throw new HmsException("SALE_ALREADY_EXISTS");
 
         }
 
-         for (SaleItemDTO saleItem : saleRequest.getSaleItems()) {
+        for (SaleItemDTO saleItem : saleRequest.getSaleItems()) {
             saleItem.setBatchNo(medicineInventoryService.sellStock(saleItem.getMedicineId(), saleItem.getQuantity()));
         }
 
         Sale sale = new Sale(null, saleRequest.getPrescriptionId(),
+                saleRequest.getBuyerName(),
+                saleRequest.getBuyerContact(),
                 LocalDateTime.now(),
                 saleRequest.getTotalAmount());
 
@@ -69,6 +73,13 @@ public class SaleServiceImpl implements SaleService {
         return saleRepository.findByPrescriptionId(prescriptionId)
                 .orElseThrow(() -> new HmsException("SALE_NOT_FOUND"))
                 .toDTO();
+    }
+
+    @Override
+    public List<SaleDTO> getAllSales() throws HmsException {
+        return ((List<Sale>) saleRepository.findAll()).stream()
+                .map(Sale::toDTO)
+                .toList();
     }
 
 }

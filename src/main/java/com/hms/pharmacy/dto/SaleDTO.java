@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class SaleDTO {
     private Long id;
     private Long prescriptionId;
+    private String buyerName;
+    private String buyerContact;
     private LocalDateTime saleDate;
     private Double totalAmount;
 
@@ -21,6 +23,8 @@ public class SaleDTO {
         return new Sale(
                 this.id,
                 this.prescriptionId,
+                this.buyerName,
+                this.buyerContact,
                 this.saleDate,
                 this.totalAmount);
     }

@@ -21,6 +21,8 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long prescriptionId;
+    private String buyerName;
+    private String buyerContact;
     private LocalDateTime saleDate;
     private Double totalAmount;
 
@@ -32,6 +34,8 @@ public class Sale {
         return new SaleDTO(
                 this.id,
                 this.prescriptionId,
+                this.buyerName,
+                this.buyerContact,
                 this.saleDate,
                 this.totalAmount);
     }
