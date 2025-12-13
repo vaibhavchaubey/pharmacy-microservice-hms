@@ -26,8 +26,8 @@ public class SaleServiceImpl implements SaleService {
     @Override
     @Transactional
     public Long createSale(SaleRequest saleRequest) throws HmsException {
-        if (saleRepository.existsByPrescriptionId(saleRequest.getPrescriptionId())) {
-            throw new HmsException("SALE_ALREADY_FOUND");
+        if (saleRequest.getPrescriptionId() != null && saleRepository.existsByPrescriptionId(saleRequest.getPrescriptionId())) {
+            throw new HmsException("SALE_ALREADY_EXISTS");
 
         }
 
