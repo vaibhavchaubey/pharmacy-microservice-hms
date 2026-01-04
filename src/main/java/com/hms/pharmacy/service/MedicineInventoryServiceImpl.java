@@ -120,13 +120,13 @@ public class MedicineInventoryServiceImpl implements MedicineInventoryService {
             Integer availableQuantity = inventory.getQuantity();
             if (availableQuantity <= remainingQuantity) {
                 // Use up the entire batch
-                batchDetails.append(String.format("Batch %s : %d units\n", inventory.getBatchNo(), availableQuantity));
+                batchDetails.append(String.format("%s : %d units\n", inventory.getBatchNo(), availableQuantity));
                 remainingQuantity -= availableQuantity;
                 inventory.setQuantity(0);
                 inventory.setStatus(StockStatus.EXPIRED);
             } else {
                 // Use part of the batch
-                batchDetails.append(String.format("Batch %s : %d units\n", inventory.getBatchNo(), remainingQuantity));
+                batchDetails.append(String.format("%s : %d units\n", inventory.getBatchNo(), remainingQuantity));
                 inventory.setQuantity(availableQuantity - remainingQuantity);
                 remainingQuantity = 0;
             }
